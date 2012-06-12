@@ -1,3 +1,116 @@
+<?php
+// This should be defined elsewhere in configuration. Included for illustrative purposes
+$db = new PDO('mysql:host=localhost;dbname=testdb', 'username', 'password');
+
+/** All of the things you would normally do to save this information to a database here :) */
+
+/**
+ * Keep this aligned with your 'products', but *always* maintained in the php code
+ */
+function payment_due($data) {
+	$amount = 0.00;
+
+/*
+	<tr>
+	  <td style="width: 10px"><input type="checkbox" name="iclass[ijulwai]" value="1"> </td>
+	  <td>July 16 - July 21<br />5:00 - 7:00 PM</td>
+	  <td>Waikiki Community Center</td>
+	  <td>$190</td>
+	</tr>
+*/
+	if (!empty($data['iclass']['ijulwai'])) {
+		$amount += 190;
+	}
+
+/*
+	<tr>
+	  <td style="width: 10px"><input type="checkbox" name="iclass[iaugwai]" value="1"></td>
+	  <td>August 20 - August 31<br />5:00 - 7:00 PM</td>
+	  <td>Waikiki Community Center</td>
+	  <td>$190</td>
+	</tr>
+*/
+	if (!empty($data['iclass']['iaugwai'])) {
+		$amount += 190;
+	}
+
+	// Add your products here!
+
+	return $amount;
+}
+
+function discount_due($data) {
+	$discount = 0;
+	//If they choose that they are a StepUp Scholar, they must provide the graduating class year as 2013 - 2016. If they do so, they recieve a 10% discount.
+	if ($data['stepup'] == 'yes') {
+		if (in_array($data['grad'], array(2013, 2014, 2015, 2016)) {
+			$discount += 10;
+		}
+	}
+
+	//If the parents are military, there must be an Installation - I'd prefer that Rank and title be required. If they provide this info then they recieve a 10% discount.
+	if ($data['military'] == 'yes') {
+		if (!empty($data['installation']) && !empty($data['jobTitle']) && !empty($data['rank'])) {
+			$discount += 10;
+		}
+	}
+
+	//If they are IMCEA then they must provide an IMCEA Member Number - this is usually alpha-numeric with the first number Alpha. If they provide the number, then they recieve a 10% discount.
+	if ($data['imcea'] == 'yes') {
+		if (!empty($data['imceaNumber'])) {
+			$discount += 10;
+		}
+	}
+
+
+	return $discount;
+}
+
+function save(PDO $db, $data) {
+	$required_fields = array('sfirst', 'slast'); // etc
+
+	foreach ($required_fields as $required_field) {
+		if (empty($data[$required_field])) {
+			throw new Exception("Missing required field");
+		}
+	}
+
+
+	$amount = payment_due($data);
+	$discount = discount_due($data);
+	$discounted_amount = round($amount * ($discount/100), 2);
+	$total = round($amount - $discounted_amount);
+
+	// You will want to customise this table with as much student data as possible!
+	$args = array(
+		$db->quote($data['sfirst']),
+		$db->quote($data['slast']),
+		$db->quote($amount),
+		$db->quote($discount),
+		$db->quote($total),
+		$db->quote('pending')
+	);
+
+	$sql = "REPLACE INTO orders(sfirst, slast, amount, discount, total, payment_status) VALUES(" . implode(",", $args) . ")";
+	$db->query($sql);
+
+	$order_id = $db->lastInsertID();
+
+	return $order_id;
+}
+
+try {
+	if (isset($_POST['submit_button'])) {
+		$order_id = save($db, $_POST);
+
+		header("Location: pay.php?order_id=" . $order_id);
+		die();
+	}
+} catch (Exception $e) {
+	die($e->getMessage() . "\nUse your browser's back button and try again.");
+}
+
+?>
 <!DOCTYPE html>
 
 <html lang="en">
@@ -10,79 +123,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="bootstrap.css">
   <meta charset="utf-8">
-  <script type="text/javascript">
-
-      var regfee = 0;
-     function addCharge() 
-      {
-          var iclass = 0;
-          for(var i = 0;i < form.iclass.length; i ++)
-          {
-                if(form.iclass[i].checked)
-                {
-                        switch(i)
-                        {
-                                case 0:
-                                        // First radio button -- not Maryknoll -- was checked -- ('Jul 16 WCC')
-                                        iclass = 190.00;
-                                        break;
-                                case 1:
-                                        // Second radio button -- Augwai ('August WCC')
-                                        iclass = 190.00;
-                                        break;
-                                default:
-                                        // Any other radio button (the only one left is 'Send InClass Info').
-                                        iclass = 0;
-                                        break;
-                        }
-                        
-                        break; // No need to loop any more, since we already found a checked radio button.
-                }
-                }
-                 var wclass = 0;
-          for(var i = 0;i < form.wclass.length; i ++)
-          {
-                if(form.wclass[i].checked)
-                {
-                        switch(i)
-                        {
-                                case 0:
-                                        // First radio button -- was checked -- ('Sept Online')
-                                        wclass = 190.00;
-                                        break;
-                                case 1:
-                                        // Second radio button -- ('Oct Online')
-                                        wclass = 190.00;
-                                        break;
-                                default:
-                                        // Any other radio button (the only one left is 'Send InClass Info').
-                                        wclass = 0;
-                                        break;
-                        }
-                        
-                        break; // No need to loop any more, since we already found a checked radio button.
-                }
-                }
-                
-                
-                var form = document.epayform;
-          var position = 0;
-      if (form.UMcustom1.checked)
-      {
-        position = 225.00;
-      }
-          var regular = 0; 
-          if (form.UMcustom19.checked)
-      {
-        regular = 30.00;
-      } 
-          var review = 0;
-          if (form.UMcustom6.checked)
-      {
-        review = 50.00;
-      } 
-          }
-  </script>
   <style type="text/css">
       body {
                 background-color: #c6edff;              
@@ -121,10 +161,8 @@
       <p><i>Attendance is limited to available space; please register early</i></p>
     </center>
 
-    <form name="epayform" action="https://everyteencansucceed.com/cgi/attendee2.php" method="post" onsubmit="document.epayform.submitbutton.value='Please Wait... Processing';" autocomplete="off">
-      <input type="hidden" name="subject" value="Registration for Every Teen Can Succeed">
-
-      <h2><font face="arial" size="4">Student Information</font></h2>
+    <form name="epayform" action="" method="post">
+      <h2>Student Information</h2>
 
       <table class="table-striped table-condensed">
         <tr>
@@ -154,44 +192,69 @@
         <tr>
           <th>StepUp Scholar?</th>
 
-          <td><label><input type="radio" id="stepupyes" name="stepup" value="yes" onclick="addCharge()">Yes</label> <label><input type="radio" id="stepupno" name="stepup" value="no" checked="checked">No</label></td>
+          <td><label><input type="radio" id="stepupyes" name="stepup" value="yes">Yes</label> <label><input type="radio" id="stepupno" name="stepup" value="no" checked="checked">No</label></td>
         </tr>
 
         <tr>
           <th>Graduating Class</th>
 
-          <td><input id="grad" name="grad" type="text" size="4" required="required"></td>
+          <td><input id="grad" name="grad" type="number" size="4" required="required" placeholder="2012"></td>
         </tr>
       </table>
 
-      <h2><font face="arial" size="4">College Lifestyle and SAT Prep In-Class Programs</font></h2>
+      <h2> College Lifestyle and SAT Prep In-Class Programs </h2>
 
-      <p><font face="arial" size="4"><i>includes textbook and class materials</i></font></p>
+      <p> <i>includes textbook and class materials</i> </p>
 
       <table>
         <tr>
-          <td><input type="radio" name="iclass" value="ijunmar" onclick="" disabled="disabled"> June 12 - July 20 : 1:15 - 3:15 PM -- Maryknoll High Schoool -- Call Mr. Nagami at (808) 952-7340<br>
-          <input type="radio" name="iclass" value="ijulwai" onclick="addCharge()"> July 16 - July 21 : 5:00 - 7:00 PM -- Waikiki Community Center -- $190<br>
-          <input type="radio" name="iclass" value="iaugwai" onclick="addCharge()"> August 20 - August 31 : 5:00 - 7:00 PM -- Waikiki Community Center -- $190<br>
-          <input type="radio" name="iclass" value="iinfo"> Please keep me informed of future In-Class Programs</td>
+          <td style="width: 10px; "><input type="checkbox" name="iclass[ijunmar]" value="ijunmar" onclick="" disabled="disabled"></td>
+		  <td>June 12 - July 20<br />1:15 - 3:15 PM</td>
+		  <td>Maryknoll High Schoool</td>
+		  <td>Call Mr. Nagami<br />(808) 952-7340</td>
+        </tr>
+        <tr>
+          <td style="width: 10px"><input type="checkbox" name="iclass[ijulwai]" value="1"> </td>
+		  <td>July 16 - July 21<br />5:00 - 7:00 PM</td>
+		  <td>Waikiki Community Center</td>
+		  <td>$190</td>
+        </tr>
+
+        <tr>
+          <td style="width: 10px"><input type="checkbox" name="iclass[iaugwai]" value="1"></td>
+		  <td>August 20 - August 31<br />5:00 - 7:00 PM</td>
+		  <td>Waikiki Community Center</td>
+		  <td>$190</td>
+        </tr>
+		
+		<tr>
+  		<td style="width: 10px"><input type="checkbox" name="iclass[iinfo]" value="1"></td>
+          <td colspan="3">
+           Please keep me informed of future In-Class Programs</td>
         </tr>
       </table>
 
-      <h2><font face="arial" size="4">College Lifestyle and SAT Prep Interactive On-Line Webinar Programs</font></h2>
+      <h2> College Lifestyle and SAT Prep Interactive On-Line Webinar Programs </h2>
 
-      <p><font face="arial" size="4"><i>textbook and class materials provided by mail and email</i></font></p>
+      <p> <i>textbook and class materials provided by mail and email</i> </p>
 
       <table>
         <tr>
-          <td><input type="radio" name="wclass" value="wsep" onclick="addCharge()"> September 10 - September 21 : 6:30 - 8:30 PM -- $190<br>
-          <input type="radio" name="wclass" value="woct" onclick="addCharge()"> October 8 - October 19 : 6:30 - 8:30 PM -- $190<br>
-          <input type="radio" name="wclass" value="winfo"> Please keep me informed of future On-Line Programs</td>
+          <td style="width: 10px">
+		  <input type="checkbox" name="wclass" value="wsep" onclick="addCharge(190)"></td><td>September 10 - September 21 <br />6:30 - 8:30 PM</td><td></td><td>$190</td></tr>
+        <tr>
+          <td style="width: 10px">          
+		  <input type="checkbox" name="wclass" value="woct" onclick="addCharge(190)"></td><td> October 8 - October 19<br /> 6:30 - 8:30 PM </td><td></td><td>$190</td></tr>
+        <tr>
+          <td style="width: 10px">
+          <input type="checkbox" name="wclass" value="winfo"></td><td colspan="2"> Please keep me informed of future On-Line Programs</td>
+
         </tr>
       </table>
 
-      <h2><font face="arial" size="4">Parent Information</font></h2>
+      <h2> Parent Information </h2>
 
-      <p><font face="arial" size="4">(All contact information is required for processing)</font></p>
+      <p> (All contact information is required for processing) </p>
 
       <table>
         <tr>
@@ -273,7 +336,8 @@
         <tr>
           <th>IMCEA?</th>
 
-          <td><input type="radio" id="imceayes" name="imcea" value="yes" onclick="addCharge()">Yes <input type="radio" id="imceano" name="imcea" value="no" checked="checked">No</td>
+          <td><input type="radio" id="imceayes" name="imcea" value="yes">Yes
+		  <input type="radio" id="imceano" name="imcea" value="no" checked="checked">No</td>
         </tr>
 
         <tr>
@@ -281,97 +345,13 @@
 
           <td><input type="text" name="memberNumber" size="10"></td>
         </tr>
+		<tr>
+			<td></td>
+			<td style="text-align: right"><input type="submit" id="submit_button" name="submit_button" value="Save and Continue to Payment"></td>
+		</tr>
       </table>
-
-      <h2><font face="arial" size="4">Payment Information</font></h2>
-
-      <p><font face="arial" size="4"><img border="0" src="visa.gif" width="44" height="28" hspace="3"> <img border="0" src="mastercard.gif" width="44" height="28" hspace="3"> <img border="0" src="amex.gif" width="44" height="28" hspace="3"> <img border="0" src="discover.gif" width="44" height="28" hspace="3"></font></p>
-
-      <p><font face="arial" size="4"><small>If paying by check please print this form and mail with payment to</small></font></p>
-
-      <address>
-        <font face="arial" size="4"><small>Every Teen Can Succeed, 2509 Ala Wai Blvd. #801-A, Honolulu, HI 96815</small></font>
-      </address>
-
-      <table>
-        <tr>
-          <th>Credit Card Type</th>
-
-          <td><input type="hidden" name="paybycredit" value="1"> <select size="1" name="payment_type">
-            <option value="Visa">
-              Visa
-            </option>
-
-            <option value="MasterCard">
-              MasterCard
-            </option>
-
-            <option value="American Express">
-              American Express
-            </option>
-
-            <option value="Discover">
-              Discover
-            </option>
-
-            <option value="Check">
-              Check
-            </option>
-          </select></td>
-        </tr>
-
-        <tr>
-          <th>Name on Card</th>
-
-          <td><input type="text" name="UMname" size="30" required="required"></td>
-        </tr>
-
-        <tr>
-          <th>Card Billing Zipcode</th>
-
-          <td><input type="text" name="UMzip" size="15" required="required"></td>
-        </tr>
-
-        <tr>
-          <th>Email Address</th>
-
-          <td><input type="text" name="UMcustemail" size="50" required="required"> <small>(to send receipt)</small></td>
-        </tr>
-
-        <tr>
-          <th>Card Number</th>
-
-          <td><input type="text" name="UMcard" size="17" required="required"></td>
-        </tr>
-
-        <tr>
-          <th>Card Expiration Date (MMYY)</th>
-
-          <td><input type="text" name="UMexpir" size="4" required="required"> <small>(no space or dash please)</small></td>
-        </tr>
-
-        <tr>
-          <th>Card ID (CVV2/CID) Number</th>
-
-          <td><input type="text" name="UMcvv2" size="5"> <a target="_blank" href="/cvv.htm"><small>What is the Card ID?</small></a></td>
-        </tr>
-      </table>
-
-      <div align="right">
-        <font face="arial" size="4"><b><i>Total Amount to Charge</i></b> <small>($USD)</small>: $ <input type="text" id="amount_box" name="UMamount" value="N/A"></font>
-      </div>
-
-      <center>
-        <font face="arial" size="4">Call <i><b>Every Teen Can Succeed</b></i> at <b>(808) 372-3626</b> with any payment questions</font>
-      </center>
-    </form>
   </div>
 
-  <p align="center"><font face="arial" size="4"><input type="submit" id="submit_button" name="submit_button" value="Register Now" onclick="return verify();"> <!--
-<div align="right"><span id="siteseal"><script type="text/javascript" src="https://seal.starfieldtech.com/getSeal?sealID=TBUvlHEvPDG4JpKHHOGg9eSESBcvtVMEYDGLi8hIcneIHCU62QH4etkyZq0"></script></span>
-<script type="text/JavaScript">var TFN='';var TFA='';var TFI='0';var TFL='0';var tf_RetServer="rt.trafficfacts.com";var tf_SiteId="fed17602acba26e1fd9083e89872beaa75503e5a";var tf_ScrServer=document.location.protocol+"//rt.trafficfacts.com/tf.php?k=fed17602acba26e1fd9083e89872beaa75503e5a;c=s;v=5";document.write(unescape('%3Cscript type="text/JavaScript" src="'+tf_ScrServer+'">%3C/script>'));</script><noscript><img src="http://rt.trafficfacts.com/ns.php?k=fed17602acba26e1fd9083e89872beaa75503e5a" height="1" width="1" alt=""/></noscript>
-</div>
--->
-   </font></p>
+
 </body>
 </html>
