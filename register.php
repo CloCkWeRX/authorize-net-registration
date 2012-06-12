@@ -83,6 +83,25 @@
 	body {
 		background-color: #c6edff;		
 	}
+
+	table {
+		background-color: white;
+		width: 600px;
+	}
+
+	table th {
+		width: 200px;
+		border: 0;
+		text-align: right;
+		padding-right: 2.0em;
+	}
+	table td {
+		width: 400px;
+		border: 0 !important;
+	}
+	table td input {
+		width: 98%;
+	}
 	</style>
 </head>
 <body>
@@ -105,13 +124,13 @@
 <table class="table-striped table-condensed">
 	<tr>
 		<th>First Name</th>
-		<td><input type="text" id="sfirst" name="sfirst" size="25" required="required" /></td>
+		<td><input type="text" id="sfirst" name="sfirst" size="25" required="required" placeholder="John" /></td>
 	</tr>
 
 
 	<tr>
 		<th>Last Name</th>
-		<td><input id="slast" name="slast" type="text"  required="required" size="25"  required="required" /></td>
+		<td><input id="slast" name="slast" type="text"  required="required" size="25"  required="required" placeholder="Smith" /></td>
 	</tr>
 
 	<tr>
@@ -141,22 +160,29 @@
 
 <h2>College Lifestyle and SAT Prep In-Class Programs</h2>
 <p><i>includes textbook and class materials</i></p>
-<p>
+<table>
+<tr>
+<td>
 <input type="radio"  name="iclass" value="ijunmar" onclick="" disabled="disabled" /> June 12 - July 20 : 1:15 - 3:15 PM -- Maryknoll High Schoool -- Call Mr. Nagami at (808) 952-7340<br>
 <input type="radio"  name="iclass" value="ijulwai" onclick="addCharge()" /> July 16 - July 21 : 5:00 - 7:00 PM -- Waikiki Community Center -- $190<br>
 <input type="radio"  name="iclass" value="iaugwai" onclick="addCharge()" /> August 20 - August  31 : 5:00 - 7:00 PM -- Waikiki Community Center -- $190<br>
 <input type="radio"  name="iclass" value="iinfo"> Please keep me informed of future In-Class Programs
-</p>
+</td>
+</tr>
+</table>
 
 
 <h2>College Lifestyle and SAT Prep Interactive On-Line Webinar Programs</h2>
 <p><i>textbook and class materials provided by mail and email</i></p>
-<p>
+<table>
+<tr>
+<td>
 <input type="radio"  name="wclass" value="wsep" onclick="addCharge()" /> September 10 - September 21 : 6:30 - 8:30 PM -- $190<br>
 <input type="radio"  name="wclass" value="woct" onclick="addCharge()" /> October 8 - October 19 : 6:30 - 8:30 PM -- $190<br>
 <input type="radio"  name="wclass"  value="winfo"> Please keep me informed of future On-Line Programs
-</p>
-
+</td>
+</tr>
+</table>
 <h2>Parent Information</h2>
 <p>(All contact information is required for processing)</p>
 
