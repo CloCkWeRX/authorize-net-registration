@@ -1,12 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Every Teen Can Registration</title>
-	  <meta name="description" content="Register for the Every Teen Can Succeed program to raise SAT scores, prepare for college, and enhance career education in Honolulu, Hawaii.">
-    <meta name="keywords" content="Honolulu,Oahu,Test Prep programs,Hawaii,College Life,College Lifestyle,teens,teen succeed,succeed,team success,success,scholarships,SAT,SAT prep,PSAT prep,skill-building,education,college prep,college planning,student,every team,certification,college survival">
+  <title>Every Teen Can Registration</title>
+  <meta name="description" content="Register for the Every Teen Can Succeed program to raise SAT scores, prepare for college, and enhance career education in Honolulu, Hawaii.">
+  <meta name="keywords" content="Honolulu,Oahu,Test Prep programs,Hawaii,College Life,College Lifestyle,teens,teen succeed,succeed,team success,success,scholarships,SAT,SAT prep,PSAT prep,skill-building,education,college prep,college planning,student,every team,certification,college survival">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
-<meta charset=<"utf-8">
-<style></style>
+  <meta charset="utf-8">
 <script>
 function validateNonEmpty(inputField, helpText) {
 // See if the field has text
@@ -111,9 +110,9 @@ Program Registration<br></font><font size="4">Please enter the appropriate infor
 <input type="hidden" name="subject" value="Registration for Every Teen Can Succeed" />
 <font face="arial" color="#000000" size="4">
 <big>Student Information:</big><p>
-First Name&nbsp;&nbsp;<input type="text" id="sfirst" name="sfirst" size="25" onblur="validateNonEmpty(this), document.getElementById('name_help');" />
+First Name&nbsp;&nbsp;<input type="text" id="sfirst" name="sfirst" size="25" required="required" onblur="document.getElementById('name_help');" />
 <span id="name_help" class="help"></span>&nbsp;&nbsp;
-&nbsp;&nbsp;&nbsp;Last Name&nbsp;&nbsp;<input id="slast" name="slast" type="text" size="25" onblur="validateNonEmpty(this), document.getElementById('name_help');" />
+&nbsp;&nbsp;&nbsp;Last Name&nbsp;&nbsp;<input id="slast" name="slast" type="text"  required="required" size="25"  required="required" onblur="document.getElementById('name_help');" />
 <span id="name_help" class="help"></span><p>
 
 School&nbsp;&nbsp;<input type="text" id="sschool" name="school" size="25">&nbsp;&nbsp;&nbsp;Counselor&nbsp;&nbsp;<input type="text" id="scounselor" name="scounselor" size="25"><p>
@@ -122,7 +121,7 @@ StepUp Scholar?&nbsp;&nbsp;
 			<input type="radio" id="stepupno" name="stepup" value="no" CHECKED>No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 Graduating Class &nbsp;&nbsp;&nbsp;&nbsp;
-&nbsp;<input id="grad" name="grad" type="text" size="4" onblur="validateNonEmpty(this), document.getElementById('grad_help');" />
+&nbsp;<input id="grad" name="grad" type="text" size="4" required="required" onblur="document.getElementById('grad_help');" />
 <span id="grad_help" class="help"></span><p>
 
 <div align="left">
