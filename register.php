@@ -1,6 +1,5 @@
 <?php
-// This should be defined elsewhere in configuration. Included for illustrative purposes
-$db = new PDO('mysql:host=localhost;dbname=testdb', 'username', 'password');
+require_once 'config.php';
 
 /** All of the things you would normally do to save this information to a database here :) */
 
