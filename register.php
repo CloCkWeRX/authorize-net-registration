@@ -86,7 +86,7 @@
 	</style>
 </head>
 <body>
-
+<div class="container">
 <center>
 <img src="hdrpg.png" usemap="#NotNamed" border=0>
 <map name="NotNamed">
@@ -95,41 +95,48 @@
 </map>
 
 <h1>Program Registration</h1>
-<p><i><center>Attendance is limited to available space; please register early</center></i></font></center>
+<p><i>Attendance is limited to available space; please register early</i></p>
+</center>
 <form name="epayform" action="https://everyteencansucceed.com/cgi/attendee2.php" method="POST" onSubmit="document.epayform.submitbutton.value='Please Wait... Processing';" autocomplete="off">
 
 <input type="hidden" name="subject" value="Registration for Every Teen Can Succeed" />
 <font face="arial"   size="4">
 <h2>Student Information</h2>
-<p>
-	<label for="sfirst">First Name</label>
-	<input type="text" id="sfirst" name="sfirst" size="25" required="required" />
-</p>
+<table class="table-striped table-condensed">
+	<tr>
+		<th><label for="sfirst">First Name</label></th>
+		<td><input type="text" id="sfirst" name="sfirst" size="25" required="required" /></td>
+	</tr>
 
-<p>
-	<label for="slast">Last Name</label>
-	<input id="slast" name="slast" type="text"  required="required" size="25"  required="required" />
-</p>
 
-<p>
-	<label for="sschool">School</label>
-	<input type="text" id="sschool" name="school" size="25" />
-</p>
-<p>
-	<label for="scounselor">Counselor</label>
-	<input type="text" id="scounselor" name="scounselor" size="25" />
-</p>
+	<tr>
+		<th><label for="slast">Last Name</label></th>
+		<td><input id="slast" name="slast" type="text"  required="required" size="25"  required="required" /></td>
+	</tr>
+
+	<tr>
+		<th><label for="sschool">School</label></th>
+		<td><input type="text" id="sschool" name="school" size="25" /></td>
+	</tr>
+
+	<tr>
+		<th><label for="scounselor">Counselor</label></th>
+		<td><input type="text" id="scounselor" name="scounselor" size="25" /></td>
+	</tr>
 	
-<p>
-	StepUp Scholar?<br />
-	<label><input type="radio" id="stepupyes" name="stepup" value="yes" onclick="addCharge()" />Yes</label>
-	<label><input type="radio" id="stepupno" name="stepup" value="no" checked="checked">No</label>	
-</p>
+	<tr>
+		<th>StepUp Scholar?</th>
+		<td>
+			<label><input type="radio" id="stepupyes" name="stepup" value="yes" onclick="addCharge()" />Yes</label>
+			<label><input type="radio" id="stepupno" name="stepup" value="no" checked="checked">No</label>	
+		</td>
+	</tr>
 
-<p>
-	<label>Graduating Class</label>
-	<input id="grad" name="grad" type="text" size="4" required="required"  />
-</p>
+	<tr>
+		<th><label>Graduating Class</label></th>
+		<td><input id="grad" name="grad" type="text" size="4" required="required"  /></td>
+	</tr>
+</table>
 
 <div align="left">
 <b>College Lifestyle and SAT Prep In-Class Programs</b> -- (<i>includes textbook and class materials</i>)<br>
@@ -184,7 +191,7 @@ Payment	Information:  </font></b>  <img border="0" src="visa.gif" width="44" hei
  
  
 		<tr>
-		<td bgcolor="#DFE6FA" colspan="4"><font face="arial" size="4" >Credit Card Type:  
+		<td colspan="4"><font face="arial" size="4" >Credit Card Type:  
 		<input type="hidden" name="paybycredit" value="1">	
 			<select size="1" name="payment_type">
 			<option value="Visa">Visa</option>
@@ -224,5 +231,6 @@ Payment	Information:  </font></b>  <img border="0" src="visa.gif" width="44" hei
 			</td>
 </td></tr></table>
 </form>
+</div>
 </body>
 </html>
