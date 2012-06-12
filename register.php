@@ -6,23 +6,6 @@
   <meta name="keywords" content="Honolulu,Oahu,Test Prep programs,Hawaii,College Life,College Lifestyle,teens,teen succeed,succeed,team success,success,scholarships,SAT,SAT prep,PSAT prep,skill-building,education,college prep,college planning,student,every team,certification,college survival">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
   <meta charset="utf-8">
-<script>
-function validateNonEmpty(inputField, helpText) {
-// See if the field has text
-if (inputField.value.length == 0) {
-// The field is blank, so send message
-if (helpText != null)
-helpText.innerHTML = "Please enter Student First Name";
-return false;
-}
-else {
-// Field is good, clear the help message
-if (helpText != null)
-helpText.innerHTML = "";
-return true;
-}
-}
-</script> 
 <script> 
 <!--
       var regfee = 0;
@@ -118,7 +101,7 @@ First Name&nbsp;&nbsp;<input type="text" id="sfirst" name="sfirst" size="25" req
 School&nbsp;&nbsp;<input type="text" id="sschool" name="school" size="25">&nbsp;&nbsp;&nbsp;Counselor&nbsp;&nbsp;<input type="text" id="scounselor" name="scounselor" size="25"><p>
 StepUp Scholar?&nbsp;&nbsp; 
 			<input type="radio" id="stepupyes" name="stepup" value="yes" onclick="addCharge()" />Yes&nbsp;
-			<input type="radio" id="stepupno" name="stepup" value="no" CHECKED>No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="radio" id="stepupno" name="stepup" value="no" checked="checked">No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
 Graduating Class &nbsp;&nbsp;&nbsp;&nbsp;
 &nbsp;<input id="grad" name="grad" type="text" size="4" required="required" onblur="document.getElementById('grad_help');" />
@@ -127,7 +110,7 @@ Graduating Class &nbsp;&nbsp;&nbsp;&nbsp;
 <div align="left">
 <b>College Lifestyle and SAT Prep In-Class Programs</b> -- (<i>includes textbook and class materials</i>)<br>
 
-<input type="radio"  name="iclass" value="ijunmar" onclick="" DISABLED />June 12 - July 20 : 1:15 - 3:15 PM -- Maryknoll High Schoool -- Call Mr. Nagami at (808) 952-7340<br>
+<input type="radio"  name="iclass" value="ijunmar" onclick="" disabled="disabled" />June 12 - July 20 : 1:15 - 3:15 PM -- Maryknoll High Schoool -- Call Mr. Nagami at (808) 952-7340<br>
 <input type="radio"  name="iclass" value="ijulwai" onclick="addCharge()" />July 16 - July 21 : 5:00 - 7:00 PM -- Waikiki Community Center -- $190<br>
 <input type="radio"  name="iclass" value="iaugwai" onclick="addCharge()" />August 20 - August&nbsp; 31 : 5:00 - 7:00 PM -- Waikiki Community Center -- $190<br>
 <input type="radio"  name="iclass" value="iinfo">Please keep me informed of future In-Class Programs<p>
@@ -156,14 +139,14 @@ Phone:  <input type="text" name="pPhone" size="15"><p>
 
 Military?&nbsp;&nbsp;
 <input type="radio" id="militaryyes" name="military" value="yes" onclick="addCharge()" />Yes&nbsp;
-			<input type="radio" id="militaryno" name="military" value="no" CHECKED>No&nbsp;&nbsp;&nbsp;(If Yes, please answer the following)<br>
+			<input type="radio" id="militaryno" name="military" value="no" checked="checked" />No&nbsp;&nbsp;&nbsp;(If Yes, please answer the following)<br>
 Installation:&nbsp;
 			<input type="text" name="installation" size="28" />&nbsp;&nbsp;&nbsp;Job Title&nbsp;
 			<input type="text" name="jobTitle" size="28" />&nbsp;&nbsp;&nbsp;Rank&nbsp;<input type="text" name="rank" size="28" />
 <p>
 IMCEA?&nbsp;&nbsp;
 <input type="radio" id="imceayes" name="imcea" value="yes" onclick="addCharge()" />Yes&nbsp;
-			<input type="radio" id="imceano" name="imcea" value="no" CHECKED>No&nbsp;&nbsp;&nbsp;IMCEA Member Number:&nbsp;
+			<input type="radio" id="imceano" name="imcea" value="no" checked="checked">No&nbsp;&nbsp;&nbsp;IMCEA Member Number:&nbsp;
 			<input type="text" name="memberNumber" size="10" /><p>
 			
 		<table><tr><td>	
